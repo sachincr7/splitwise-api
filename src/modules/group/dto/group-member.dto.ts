@@ -3,13 +3,13 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 export class GroupMemberDto {
   @IsNumber()
   @IsNotEmpty()
-  groupId: number;
+  group_id: number;
 
   @IsNumber()
   @IsNotEmpty()
-  creatorId: number;
+  creator_id: number;
 
   @IsNumber()
   @IsNotEmpty()
-  memberId: number;
+  member_id: number;
 }

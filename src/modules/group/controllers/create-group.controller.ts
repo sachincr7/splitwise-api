@@ -9,7 +9,7 @@ export class CreateGroupController {
   @Post()
   @Version('1')
   async handle(@Body() createGroupDto: CreateGroupDto) {
-    const { name, creatorId, memberIds } = createGroupDto;
-    return this.groupService.createGroup(name, creatorId, memberIds);
+    const { name, creator_id, member_ids } = createGroupDto;
+    return this.groupService.createGroup(name, creator_id, member_ids);
   }
 }

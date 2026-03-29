@@ -7,9 +7,9 @@ export class CreateGroupDto {
 
   @IsNumber()
   @IsNotEmpty()
-  creatorId: number;
+  creator_id: number;
 
   @IsArray()
   @IsNumber({}, { each: true })
-  memberIds: number[];
+  member_ids: number[];
 }

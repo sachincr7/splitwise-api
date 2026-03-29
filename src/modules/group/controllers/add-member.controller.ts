@@ -9,7 +9,7 @@ export class AddMemberController {
   @Post('members')
   @Version('1')
   async handle(@Body() dto: GroupMemberDto) {
-    const { groupId, creatorId, memberId } = dto;
-    return this.groupService.addMember(groupId, creatorId, memberId);
+    const { group_id, creator_id, member_id } = dto;
+    return this.groupService.addMember(group_id, creator_id, member_id);
   }
 }
