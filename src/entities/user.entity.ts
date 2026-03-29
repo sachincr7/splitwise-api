@@ -5,4 +5,10 @@ import { Column, Entity } from 'typeorm';
 export class UserEntity extends BaseEntityClass {
   @Column()
   name: string;
+
+  @Column({ unique: true, nullable: false })
+  phone: string;
+
+  @Column()
+  password: string;
 }
