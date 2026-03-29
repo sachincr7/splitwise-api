@@ -42,4 +42,8 @@ export class ExpenseEntity extends BaseEntityClass {
     inverseJoinColumn: { name: 'user_id' },
   })
   users: UserEntity[];
+
+  getTotalAmount(): number {
+    return this.expense;
+  }
 }

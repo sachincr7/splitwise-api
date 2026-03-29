@@ -23,7 +23,8 @@
     "schema:log": "pnpm typeorm schema:log -d src/database/data-source.ts",
     "migration:show": "pnpm typeorm migration:show -d src/database/data-source.ts",
     "migration:run": "pnpm typeorm migration:run -d src/database/data-source.ts",
-    "migration:revert": "pnpm typeorm migration:revert -d src/database/data-source.ts"
+    "migration:revert": "pnpm typeorm migration:revert -d src/database/data-source.ts",
+    "seed:users": "ts-node src/database/seeders/user.seeder.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
