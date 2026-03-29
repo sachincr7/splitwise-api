@@ -8,6 +8,7 @@ import { SplitStrategy } from 'src/modules/split/interfaces/split-strategy.inter
 import { EqualSplitStrategy } from 'src/modules/split/strategies/equal-split.strategy';
 import { PercentageSplitStrategy } from 'src/modules/split/strategies/percentage-split.strategy';
 import { DataSource, In, Repository } from 'typeorm';
+import { AddExpenseDto } from './dto/add-expense.dto';
 
 @Injectable()
 export class ExpenseService {
@@ -53,6 +54,43 @@ export class ExpenseService {
 
     savedExpense.splits = splits;
     return savedExpense;
+  }
+
+  async createExpense(dto: AddExpenseDto) {
+    const users = await this.userRepo.find({ where: { id: In(dto.user_ids) } });
+    if (users.length !== dto.user_ids.length) {
+      throw new NotFoundException('One or more users not found');
+    }
+
+    const createdBy = await this.userRepo.findOneBy({ id: dto.created_by });
+    if (!createdBy) {
+      throw new NotFoundException('Creator user not found');
+    }
+
+    const group = await this.groupRepo.findOneBy({ id: dto.group_id });
+    if (!group) {
+      throw new NotFoundException('Group not found');
+    }
+
+    const expense = new ExpenseEntity();
+    expense.description = dto.description;
+    expense.split_type = dto.split_type;
+    expense.expense = dto.expense;
+    expense.group = group;
+    expense.created_by = createdBy;
+    expense.users = users;
+
+    const paidMap = new Map<number, number>(
+      dto.paid_by.map((entry) => [entry.user_id, entry.amount]),
+    );
+
+    const percentageMap = dto.percentages
+      ? new Map<number, number>(
+          dto.percentages.map((entry) => [entry.user_id, entry.percentage]),
+        )
+      : new Map<number, number>();
+
+    return this.addExpenseWithStrategy(expense, paidMap, percentageMap);
   }
 
   getUserExpenses(userId: number) {

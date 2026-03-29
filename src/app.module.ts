@@ -6,6 +6,7 @@ import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { GroupModule } from './modules/group/group.module';
+import { ExpenseModule } from './modules/expense/expense.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GroupModule } from './modules/group/group.module';
       useFactory: typeOrmConfig,
     }),
     GroupModule,
+    ExpenseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
