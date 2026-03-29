@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { ConfigService } from '@nestjs/config';
 
 export const typeOrmConfig = (configService: ConfigService) => ({
@@ -7,6 +8,6 @@ export const typeOrmConfig = (configService: ConfigService) => ({
   username: configService.get<string>('database.user'),
   password: configService.get<string>('database.password'),
   database: configService.get<string>('database.name'),
-  autoLoadEntities: true,
+  entities: [path.join(__dirname, '..', '**', '*.entity.{ts,js}')],
   synchronize: false,
 });
