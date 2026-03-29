@@ -31,7 +31,7 @@ export class GroupService {
       members,
     });
 
-    return group;
+    return this.expenseGroupRepo.save(group);
   }
 
   async addMember(groupId: number, creatorId: number, memberId: number) {
@@ -102,7 +102,10 @@ export class GroupService {
   }
 
   async getGroup(groupId: number) {
-    const group = await this.expenseGroupRepo.findOneBy({ id: groupId });
+    const group = await this.expenseGroupRepo.findOne({
+      where: { id: groupId },
+      relations: ['owner', 'members'],
+    });
     if (!group) {
       throw new NotFoundException('Group not found');
     }
