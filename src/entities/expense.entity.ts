@@ -46,4 +46,8 @@ export class ExpenseEntity extends BaseEntityClass {
   getTotalAmount(): number {
     return this.expense;
   }
+
+  getUserIds(): number[] {
+    return this.users.map((user) => user.id);
+  }
 }

@@ -7,13 +7,14 @@ import { SplitType } from 'src/entities/enums/split-type.enum';
 import { SplitStrategy } from 'src/modules/split/interfaces/split-strategy.interface';
 import { EqualSplitStrategy } from 'src/modules/split/strategies/equal-split.strategy';
 import { PercentageSplitStrategy } from 'src/modules/split/strategies/percentage-split.strategy';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 
 @Injectable()
 export class ExpenseService {
   private groupRepo: Repository<ExpenseGroupEntity>;
   private expenseRepo: Repository<ExpenseEntity>;
   private splitRepo: Repository<SplitEntity>;
+  private userRepo: Repository<UserEntity>;
 
   private strategyMap: Map<SplitType, SplitStrategy>;
 
@@ -21,6 +22,7 @@ export class ExpenseService {
     this.groupRepo = this.dataSource.getRepository(ExpenseGroupEntity);
     this.expenseRepo = this.dataSource.getRepository(ExpenseEntity);
     this.splitRepo = this.dataSource.getRepository(SplitEntity);
+    this.userRepo = this.dataSource.getRepository(UserEntity);
 
     this.strategyMap = new Map<SplitType, SplitStrategy>([
       [SplitType.EQUAL, new EqualSplitStrategy()],
@@ -44,7 +46,8 @@ export class ExpenseService {
         throw new NotFoundException('Group not found');
       }
       users = group.members;
-    //   expense.group = group;
+    } else if (expense.users && expense.users.length > 0) {
+      users = await this.userRepo.find({ where: { id: In(expense.getUserIds()) } });
     }
 
     const strategy = this.strategyMap.get(expense.split_type);
@@ -63,5 +66,12 @@ export class ExpenseService {
 
     savedExpense.splits = splits;
     return savedExpense;
+  }
+
+  getUserExpenses(userId: number) {
+    return this.expenseRepo.find({
+      where: { users: { id: userId } },
+      relations: ['users', 'splits'],
+    });
   }
 }

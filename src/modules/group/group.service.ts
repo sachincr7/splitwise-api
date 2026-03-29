@@ -35,7 +35,10 @@ export class GroupService {
   }
 
   async addMember(groupId: number, creatorId: number, memberId: number) {
-    const group = await this.expenseGroupRepo.findOneBy({ id: groupId });
+    const group = await this.expenseGroupRepo.findOne({
+      where: { id: groupId },
+      relations: ['owner', 'members'],
+    });
     if (!group) {
       throw new NotFoundException('Group not found');
     }
@@ -65,7 +68,10 @@ export class GroupService {
   }
 
   async removeMember(groupId: number, creatorId: number, memberId: number) {
-    const group = await this.expenseGroupRepo.findOneBy({ id: groupId });
+    const group = await this.expenseGroupRepo.findOne({
+      where: { id: groupId },
+      relations: ['owner', 'members'],
+    });
     if (!group) {
       throw new NotFoundException('Group not found');
     }
