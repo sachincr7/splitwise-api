@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntityClass } from './base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { ExpenseGroupEntity } from './expense-group.entity';
@@ -10,6 +11,7 @@ export class UserEntity extends BaseEntityClass {
   @Column({ unique: true, nullable: false })
   phone: string;
 
+  @Exclude()
   @Column()
   password: string;
 
