@@ -76,7 +76,7 @@ export class GroupService {
       throw new NotFoundException('Group not found');
     }
 
-    // Check if remover is the owner
+    // Check if creator is the owner
     if (group.owner.id !== creatorId) {
       throw new NotFoundException('You are not the owner of this group');
     }

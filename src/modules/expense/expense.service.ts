@@ -35,20 +35,7 @@ export class ExpenseService {
     paidMap: Map<number, number>,
     percentageMap: Map<number, number>,
   ) {
-    let users: UserEntity[] = [];
-
-    if (expense.group && expense.group.id) {
-      const group = await this.groupRepo.findOne({
-        where: { id: expense.group.id },
-        relations: ['members'],
-      });
-      if (!group) {
-        throw new NotFoundException('Group not found');
-      }
-      users = group.members;
-    } else if (expense.users && expense.users.length > 0) {
-      users = await this.userRepo.find({ where: { id: In(expense.getUserIds()) } });
-    }
+    const users: UserEntity[] = expense.users;
 
     const strategy = this.strategyMap.get(expense.split_type);
     if (!strategy) {
