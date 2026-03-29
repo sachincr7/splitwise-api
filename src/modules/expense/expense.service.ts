@@ -1,8 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ExpenseGroupEntity } from 'src/entities/expense-group.entity';
-import { ExpenseEntity } from 'src/entities/expense.entity';
-import { SplitEntity } from 'src/entities/split.entity';
-import { UserEntity } from 'src/entities/user.entity';
+import { ExpenseGroupEntity, ExpenseEntity, SplitEntity, UserEntity } from 'src/entities';
 import { SplitType } from 'src/entities/enums/split-type.enum';
 import { SplitStrategy } from 'src/modules/split/interfaces/split-strategy.interface';
 import { EqualSplitStrategy } from 'src/modules/split/strategies/equal-split.strategy';

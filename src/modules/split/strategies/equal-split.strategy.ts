@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { SplitStrategy } from '../interfaces/split-strategy.interface';
-import { ExpenseEntity } from 'src/entities/expense.entity';
-import { SplitEntity } from 'src/entities/split.entity';
-import { UserEntity } from 'src/entities/user.entity';
+import { ExpenseEntity, SplitEntity, UserEntity } from 'src/entities';
 
 @Injectable()
 export class EqualSplitStrategy implements SplitStrategy {
