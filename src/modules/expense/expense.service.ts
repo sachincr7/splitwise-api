@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import {
   ExpenseGroupEntity,
   ExpenseEntity,
@@ -23,15 +23,19 @@ export class ExpenseService {
 
   private strategyMap: Map<SplitType, SplitStrategy>;
 
-  constructor(private readonly dataSource: DataSource) {
+  constructor(
+    private readonly dataSource: DataSource,
+    private readonly equalSplitStrategy: EqualSplitStrategy,
+    private readonly percentageSplitStrategy: PercentageSplitStrategy,
+  ) {
     this.groupRepo = this.dataSource.getRepository(ExpenseGroupEntity);
     this.expenseRepo = this.dataSource.getRepository(ExpenseEntity);
     this.splitRepo = this.dataSource.getRepository(SplitEntity);
     this.userRepo = this.dataSource.getRepository(UserEntity);
 
     this.strategyMap = new Map<SplitType, SplitStrategy>([
-      [SplitType.EQUAL, new EqualSplitStrategy()],
-      [SplitType.PERCENTAGE, new PercentageSplitStrategy()],
+      [SplitType.EQUAL, this.equalSplitStrategy],
+      [SplitType.PERCENTAGE, this.percentageSplitStrategy],
     ]);
   }
 
@@ -63,7 +67,18 @@ export class ExpenseService {
     const paidMap = this.buildPaidMap(dto.paid_by);
     const percentageMap = this.buildPercentageMap(dto.percentages || []);
 
+    this.validatePaidTotal(dto.paid_by, dto.expense);
+
     return this.addExpenseWithStrategy(expense, paidMap, percentageMap);
+  }
+
+  private validatePaidTotal(paid_by: PaidByEntryDto[], expenseTotal: number): void {
+    const totalPaid = paid_by.reduce((sum, entry) => sum + entry.amount, 0);
+    if (Math.abs(totalPaid - expenseTotal) > 0.01) {
+      throw new BadRequestException(
+        `paid_by amounts (${totalPaid}) must equal the expense total (${expenseTotal})`,
+      );
+    }
   }
 
   private buildPaidMap(paid_by: PaidByEntryDto[]): Map<number, number> {
