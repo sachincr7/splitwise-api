@@ -23,7 +23,7 @@ export class PercentageSplitStrategy implements SplitStrategy {
       0,
     );
 
-    if (totalPercentage !== 100) {
+    if (Math.abs(totalPercentage - 100) > 0.01) {
       throw new BadRequestException(
         `Percentages must add up to 100, got ${totalPercentage}`,
       );

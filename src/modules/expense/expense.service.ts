@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ExpenseGroupEntity, ExpenseEntity, SplitEntity, UserEntity } from 'src/entities';
+import {
+  ExpenseGroupEntity,
+  ExpenseEntity,
+  SplitEntity,
+  UserEntity,
+} from 'src/entities';
 import { SplitType } from 'src/entities/enums/split-type.enum';
 import { SplitStrategy } from 'src/modules/split/interfaces/split-strategy.interface';
 import { EqualSplitStrategy } from 'src/modules/split/strategies/equal-split.strategy';
@@ -54,7 +59,6 @@ export class ExpenseService {
       created_by: createdBy,
       users: users,
     });
-    await this.expenseRepo.save(expense);
 
     const paidMap = this.buildPaidMap(dto.paid_by);
     const percentageMap = this.buildPercentageMap(dto.percentages || []);
@@ -71,11 +75,9 @@ export class ExpenseService {
   private buildPercentageMap(
     percentages: PercentageEntryDto[],
   ): Map<number, number> {
-    return percentages
-      ? new Map<number, number>(
-          percentages.map((entry) => [entry.user_id, entry.percentage]),
-        )
-      : new Map<number, number>();
+    return new Map<number, number>(
+      percentages.map((entry) => [entry.user_id, entry.percentage]),
+    );
   }
 
   private async saveSplits(splits: SplitEntity[], savedExpense: ExpenseEntity) {

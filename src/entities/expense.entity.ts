@@ -21,7 +21,12 @@ export class ExpenseEntity extends BaseEntityClass {
   @Column({ type: 'enum', enum: SplitType })
   split_type: SplitType;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: { to: (v) => v, from: (v) => parseFloat(v) },
+  })
   expense: number;
 
   @ManyToOne(() => ExpenseGroupEntity)
