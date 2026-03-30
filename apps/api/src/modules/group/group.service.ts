@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ExpenseGroupEntity, UserEntity } from 'apps/api/src/entities';
+import { ExpenseGroupEntity, UserEntity } from 'src/entities';
 import { DataSource, In, Repository } from 'typeorm';
 
 @Injectable()

@@ -5,7 +5,7 @@ import {
   ExpenseEntity,
   SplitEntity,
   UserEntity,
-} from 'apps/api/src/entities';
+} from 'src/entities';
 
 export const typeOrmConfig = (configService: ConfigService) => ({
   type: 'postgres' as const,

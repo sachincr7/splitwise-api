@@ -9,7 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { SplitType } from 'apps/api/src/entities/enums/split-type.enum';
+import { SplitType } from 'src/entities/enums/split-type.enum';
 import { PaidByEntryDto } from './paid-by-entry.dto';
 import { AmountEntryDto } from './amount-entry.dto';
 

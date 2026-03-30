@@ -8,11 +8,11 @@ import {
   ExpenseEntity,
   SplitEntity,
   UserEntity,
-} from 'apps/api/src/entities';
-import { SplitType } from 'apps/api/src/entities/enums/split-type.enum';
-import { SplitStrategy } from 'apps/api/src/modules/split/interfaces/split-strategy.interface';
-import { EqualSplitStrategy } from 'apps/api/src/modules/split/strategies/equal-split.strategy';
-import { PercentageSplitStrategy } from 'apps/api/src/modules/split/strategies/percentage-split.strategy';
+} from 'src/entities';
+import { SplitType } from 'src/entities/enums/split-type.enum';
+import { SplitStrategy } from 'src/modules/split/interfaces/split-strategy.interface';
+import { EqualSplitStrategy } from 'src/modules/split/strategies/equal-split.strategy';
+import { PercentageSplitStrategy } from 'src/modules/split/strategies/percentage-split.strategy';
 import { DataSource, EntityManager, In, Repository } from 'typeorm';
 import { AddExpenseDto } from './dto/add-expense.dto';
 import { PaidByEntryDto } from './dto/paid-by-entry.dto';

@@ -1,6 +1,6 @@
-import { ExpenseEntity } from 'apps/api/src/entities/expense.entity';
-import { SplitEntity } from 'apps/api/src/entities/split.entity';
-import { UserEntity } from 'apps/api/src/entities/user.entity';
+import { ExpenseEntity } from 'src/entities/expense.entity';
+import { SplitEntity } from 'src/entities/split.entity';
+import { UserEntity } from 'src/entities/user.entity';
 
 export interface SplitStrategy {
   calculateSplits(

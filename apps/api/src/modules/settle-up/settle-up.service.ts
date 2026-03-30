@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SplitEntity } from 'apps/api/src/entities/split.entity';
-import { UserEntity } from 'apps/api/src/entities/user.entity';
+import { SplitEntity } from 'src/entities/split.entity';
+import { UserEntity } from 'src/entities/user.entity';
 import { DataSource, In, Repository } from 'typeorm';
 import { BalanceDto } from './dto/balance.dto';
 
