@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   ExpenseGroupEntity,
   ExpenseEntity,
@@ -9,7 +13,7 @@ import { SplitType } from 'src/entities/enums/split-type.enum';
 import { SplitStrategy } from 'src/modules/split/interfaces/split-strategy.interface';
 import { EqualSplitStrategy } from 'src/modules/split/strategies/equal-split.strategy';
 import { PercentageSplitStrategy } from 'src/modules/split/strategies/percentage-split.strategy';
-import { DataSource, In, Repository } from 'typeorm';
+import { DataSource, EntityManager, In, Repository } from 'typeorm';
 import { AddExpenseDto } from './dto/add-expense.dto';
 import { PaidByEntryDto } from './dto/paid-by-entry.dto';
 import { PercentageEntryDto } from './dto/percentage-entry.dto';
@@ -45,7 +49,7 @@ export class ExpenseService {
       throw new NotFoundException('One or more users not found');
     }
 
-    const createdBy = await this.userRepo.findOneBy({ id: dto.created_by });
+    const createdBy = users.find((u) => u.id === dto.created_by);
     if (!createdBy) {
       throw new NotFoundException('Creator user not found');
     }
@@ -64,15 +68,19 @@ export class ExpenseService {
       users: users,
     });
 
+    // Validate that paid_by amounts sum to expense total
+    this.validatePaidTotal(dto.paid_by, dto.expense);
+
     const paidMap = this.buildPaidMap(dto.paid_by);
     const percentageMap = this.buildPercentageMap(dto.percentages || []);
-
-    this.validatePaidTotal(dto.paid_by, dto.expense);
 
     return this.addExpenseWithStrategy(expense, paidMap, percentageMap);
   }
 
-  private validatePaidTotal(paid_by: PaidByEntryDto[], expenseTotal: number): void {
+  private validatePaidTotal(
+    paid_by: PaidByEntryDto[],
+    expenseTotal: number,
+  ): void {
     const totalPaid = paid_by.reduce((sum, entry) => sum + entry.amount, 0);
     if (Math.abs(totalPaid - expenseTotal) > 0.01) {
       throw new BadRequestException(
@@ -95,11 +103,15 @@ export class ExpenseService {
     );
   }
 
-  private async saveSplits(splits: SplitEntity[], savedExpense: ExpenseEntity) {
+  private async saveSplits(
+    splits: SplitEntity[],
+    savedExpense: ExpenseEntity,
+    manager: EntityManager,
+  ) {
     for (const split of splits) {
       split.expense = savedExpense;
     }
-    return this.splitRepo.save(splits);
+    return manager.save(SplitEntity, splits);
   }
 
   private async addExpenseWithStrategy(
@@ -123,10 +135,16 @@ export class ExpenseService {
       percentageMap,
     );
 
-    const savedExpense = await this.expenseRepo.save(expense);
-
-    savedExpense.splits = await this.saveSplits(splits, savedExpense);
-    return savedExpense;
+    // Use transaction to ensure both expense and splits are saved together
+    return this.dataSource.transaction(async (manager) => {
+      const savedExpense = await manager.save(ExpenseEntity, expense);
+      savedExpense.splits = await this.saveSplits(
+        splits,
+        savedExpense,
+        manager,
+      );
+      return savedExpense;
+    });
   }
 
   getUserExpenses(userId: number) {
