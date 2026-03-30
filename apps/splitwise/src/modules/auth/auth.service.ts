@@ -41,28 +41,37 @@ export class AuthService {
 
   /**
    * Logs in a user and generates an access token
-   * @param userId - User's ID
+   * @param user - User object
    * @returns Access token
    */
-  login(userId: UserEntity['id']) {
+  login(user: { id: UserEntity['id']; email: string; name: string }) {
     const payload: AuthJwtPayload = {
-      sub: userId,
+      sub: user.id,
     };
     const accessToken = this.jwtService.sign(payload);
 
     return {
       access_token: accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
     };
   }
 
   /**
    * Registers a new user with hashed password
-   * @param email - User's email address
-   * @param password - User's plain text password
+   * @param data - Registration data containing name, email, phone, and password
    * @returns Created user object
    */
-  async register(email: string, password: string) {
-    const hashedPassword = await hash(password, 10);
-    return this.usersService.create({ email, password: hashedPassword });
+  async register(data: { name?: string; email: string; phone: string; password: string }) {
+    const hashedPassword = await hash(data.password, 10);
+    return this.usersService.create({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      password: hashedPassword,
+    });
   }
 }

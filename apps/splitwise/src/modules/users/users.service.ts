@@ -22,6 +22,7 @@ export class UsersService {
     email: string;
     password: string;
     name?: string;
+    phone?: string;
   }): Promise<UserEntity> {
     const user = this.userRepo.create(data);
     return this.userRepo.save(user);

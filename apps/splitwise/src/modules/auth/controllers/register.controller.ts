@@ -9,6 +9,6 @@ export class RegisterController {
   @Post('register')
   @Version('1')
   async handle(@Body() dto: RegisterDto) {
-    return this.authService.register(dto.email, dto.password);
+    return this.authService.register(dto);
   }
 }

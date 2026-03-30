@@ -1,5 +1,11 @@
-import * as path from 'path';
 import { ConfigService } from '@nestjs/config';
+import {
+  BaseEntityClass,
+  ExpenseGroupEntity,
+  ExpenseEntity,
+  SplitEntity,
+  UserEntity,
+} from 'src/entities';
 
 export const typeOrmConfig = (configService: ConfigService) => ({
   type: 'postgres' as const,
@@ -8,6 +14,6 @@ export const typeOrmConfig = (configService: ConfigService) => ({
   username: configService.get<string>('database.user'),
   password: configService.get<string>('database.password'),
   database: configService.get<string>('database.name'),
-  entities: [path.join(__dirname, '..', '**', '*.entity.{ts,js}')],
+  entities: [BaseEntityClass, ExpenseGroupEntity, ExpenseEntity, SplitEntity, UserEntity],
   synchronize: false,
 });
