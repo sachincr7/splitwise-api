@@ -4,10 +4,10 @@ import dataSource from '../data-source';
 import { UserEntity } from '../../entities/user.entity';
 
 const users = [
-  { name: 'Alice', phone: '9000000001', password: 'password123' },
-  { name: 'Bob', phone: '9000000002', password: 'password123' },
-  { name: 'Charlie', phone: '9000000003', password: 'password123' },
-  { name: 'David', phone: '9000000004', password: 'password123' },
+  { name: 'Alice', email: 'alice@example.com', phone: '9000000001', password: 'password123' },
+  { name: 'Bob', email: 'bob@example.com', phone: '9000000002', password: 'password123' },
+  { name: 'Charlie', email: 'charlie@example.com', phone: '9000000003', password: 'password123' },
+  { name: 'David', email: 'david@example.com', phone: '9000000004', password: 'password123' },
 ];
 
 async function seed() {
