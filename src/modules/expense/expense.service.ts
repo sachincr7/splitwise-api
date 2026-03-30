@@ -59,9 +59,9 @@ export class ExpenseService {
       description: dto.description,
       split_type: dto.split_type,
       expense: dto.expense,
-      group: group,
+      group,
       created_by: createdBy,
-      users: users,
+      users,
     });
 
     // Validate that paid_by amounts sum to expense total
@@ -70,7 +70,7 @@ export class ExpenseService {
     const paidMap = this.buildPaidMap(dto.paid_by);
     const percentageMap = this.buildPercentageMap(dto.percentages || []);
 
-    return this.addExpenseWithStrategy(expense, paidMap, percentageMap);
+    return this.addExpenseWithStrategy(expense, paidMap, percentageMap, users);
   }
 
   private validatePaidTotal(
@@ -114,9 +114,8 @@ export class ExpenseService {
     expense: ExpenseEntity,
     paidMap: Map<number, number>,
     percentageMap: Map<number, number>,
+    users: UserEntity[],
   ) {
-    const users: UserEntity[] = expense.users;
-
     const strategy = this.strategyMap.get(expense.split_type);
     if (!strategy) {
       throw new NotFoundException(
@@ -145,8 +144,8 @@ export class ExpenseService {
 
   getUserExpenses(userId: number) {
     return this.expenseRepo.find({
-      where: { users: { id: userId } },
-      relations: ['users', 'splits'],
+      where: { splits: { user: { id: userId } } },
+      relations: ['users', 'splits', 'splits.user'],
     });
   }
 }
