@@ -22,7 +22,6 @@ import { PercentageEntryDto } from './dto/percentage-entry.dto';
 export class ExpenseService {
   private groupRepo: Repository<ExpenseGroupEntity>;
   private expenseRepo: Repository<ExpenseEntity>;
-  private splitRepo: Repository<SplitEntity>;
   private userRepo: Repository<UserEntity>;
 
   private strategyMap: Map<SplitType, SplitStrategy>;
@@ -34,7 +33,6 @@ export class ExpenseService {
   ) {
     this.groupRepo = this.dataSource.getRepository(ExpenseGroupEntity);
     this.expenseRepo = this.dataSource.getRepository(ExpenseEntity);
-    this.splitRepo = this.dataSource.getRepository(SplitEntity);
     this.userRepo = this.dataSource.getRepository(UserEntity);
 
     this.strategyMap = new Map<SplitType, SplitStrategy>([
