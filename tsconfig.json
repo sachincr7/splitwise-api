@@ -18,7 +18,7 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "src/*": ["apps/splitwise/src/*"]
+      "src/*": ["apps/api/src/*"]
     }
   }
 }

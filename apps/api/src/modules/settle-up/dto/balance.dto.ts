@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/entities/user.entity';
+import { UserEntity } from 'apps/api/src/entities/user.entity';
 
 export class BalanceDto {
   from: UserEntity;
