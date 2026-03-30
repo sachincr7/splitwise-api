@@ -16,7 +16,7 @@ import { PercentageSplitStrategy } from 'src/modules/split/strategies/percentage
 import { DataSource, EntityManager, In, Repository } from 'typeorm';
 import { AddExpenseDto } from './dto/add-expense.dto';
 import { PaidByEntryDto } from './dto/paid-by-entry.dto';
-import { PercentageEntryDto } from './dto/percentage-entry.dto';
+import { AmountEntryDto } from './dto/amount-entry.dto';
 
 @Injectable()
 export class ExpenseService {
@@ -68,9 +68,9 @@ export class ExpenseService {
     this.validatePaidTotal(dto.paid_by, dto.expense);
 
     const paidMap = this.buildPaidMap(dto.paid_by);
-    const percentageMap = this.buildPercentageMap(dto.percentages || []);
+    const amountMap = this.buildAmountMap(dto.amounts || []);
 
-    return this.addExpenseWithStrategy(expense, paidMap, percentageMap, users);
+    return this.addExpenseWithStrategy(expense, paidMap, amountMap, users);
   }
 
   private validatePaidTotal(
@@ -91,13 +91,13 @@ export class ExpenseService {
     );
   }
 
-  private buildPercentageMap(
-    percentages: PercentageEntryDto[],
+  private buildAmountMap(
+    amounts: AmountEntryDto[],
   ): Map<number, number> {
     return new Map<number, number>(
-      percentages.map((entry) => [entry.user_id, entry.percentage]),
+      amounts.map((entry) => [entry.user_id, entry.amount]),
     );
-  }
+  } 
 
   private async saveSplits(
     splits: SplitEntity[],
@@ -113,7 +113,7 @@ export class ExpenseService {
   private async addExpenseWithStrategy(
     expense: ExpenseEntity,
     paidMap: Map<number, number>,
-    percentageMap: Map<number, number>,
+    amountMap: Map<number, number>,
     users: UserEntity[],
   ) {
     const strategy = this.strategyMap.get(expense.split_type);
@@ -127,7 +127,7 @@ export class ExpenseService {
       expense,
       users,
       paidMap,
-      percentageMap,
+      amountMap,
     );
 
     // Use transaction to ensure both expense and splits are saved together

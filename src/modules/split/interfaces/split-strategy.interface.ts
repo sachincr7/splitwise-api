@@ -7,6 +7,6 @@ export interface SplitStrategy {
     expense: ExpenseEntity,
     users: UserEntity[],
     paidMap: Map<number, number>,
-    percentageMap?: Map<number, number>,
+    amountMap?: Map<number, number>,
   ): SplitEntity[];
 }

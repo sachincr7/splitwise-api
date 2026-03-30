@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer';
 import { SplitType } from 'src/entities/enums/split-type.enum';
 import { PaidByEntryDto } from './paid-by-entry.dto';
-import { PercentageEntryDto } from './percentage-entry.dto';
+import { AmountEntryDto } from './amount-entry.dto';
 
 export class AddExpenseDto {
   @IsString()
@@ -42,6 +42,6 @@ export class AddExpenseDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => PercentageEntryDto)
-  percentages?: PercentageEntryDto[];
+  @Type(() => AmountEntryDto)
+  amounts?: AmountEntryDto[];
 }
