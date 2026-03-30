@@ -20,9 +20,8 @@ import { PercentageEntryDto } from './dto/percentage-entry.dto';
 
 @Injectable()
 export class ExpenseService {
-  private groupRepo: Repository<ExpenseGroupEntity>;
+  private expenseGroupRepo: Repository<ExpenseGroupEntity>;
   private expenseRepo: Repository<ExpenseEntity>;
-  private userRepo: Repository<UserEntity>;
 
   private strategyMap: Map<SplitType, SplitStrategy>;
 
@@ -31,9 +30,8 @@ export class ExpenseService {
     private readonly equalSplitStrategy: EqualSplitStrategy,
     private readonly percentageSplitStrategy: PercentageSplitStrategy,
   ) {
-    this.groupRepo = this.dataSource.getRepository(ExpenseGroupEntity);
+    this.expenseGroupRepo = this.dataSource.getRepository(ExpenseGroupEntity);
     this.expenseRepo = this.dataSource.getRepository(ExpenseEntity);
-    this.userRepo = this.dataSource.getRepository(UserEntity);
 
     this.strategyMap = new Map<SplitType, SplitStrategy>([
       [SplitType.EQUAL, this.equalSplitStrategy],
@@ -42,19 +40,19 @@ export class ExpenseService {
   }
 
   async createExpense(dto: AddExpenseDto) {
-    const users = await this.userRepo.find({ where: { id: In(dto.user_ids) } });
-    if (users.length !== dto.user_ids.length) {
-      throw new NotFoundException('One or more users not found');
+    const group = await this.expenseGroupRepo.findOne({
+      where: { id: dto.group_id },
+      relations: ['owner', 'members'],
+    });
+    if (!group) {
+      throw new NotFoundException('Group not found');
     }
+
+    const users = group.members;
 
     const createdBy = users.find((u) => u.id === dto.created_by);
     if (!createdBy) {
       throw new NotFoundException('Creator user not found');
-    }
-
-    const group = await this.groupRepo.findOneBy({ id: dto.group_id });
-    if (!group) {
-      throw new NotFoundException('Group not found');
     }
 
     const expense = this.expenseRepo.create({

@@ -35,10 +35,6 @@ export class AddExpenseDto {
   created_by: number;
 
   @IsArray()
-  @IsNumber({}, { each: true })
-  user_ids: number[];
-
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => PaidByEntryDto)
   paid_by: PaidByEntryDto[];
