@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { GroupModule } from './modules/group/group.module';
 import { ExpenseModule } from './modules/expense/expense.module';
+import { SettleUpModule } from './modules/settle-up/settle-up.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ExpenseModule } from './modules/expense/expense.module';
     }),
     GroupModule,
     ExpenseModule,
+    SettleUpModule,
   ],
   controllers: [AppController],
   providers: [AppService],
