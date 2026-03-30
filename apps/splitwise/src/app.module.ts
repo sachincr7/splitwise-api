@@ -8,6 +8,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { GroupModule } from './modules/group/group.module';
 import { ExpenseModule } from './modules/expense/expense.module';
 import { SettleUpModule } from './modules/settle-up/settle-up.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SettleUpModule } from './modules/settle-up/settle-up.module';
     GroupModule,
     ExpenseModule,
     SettleUpModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

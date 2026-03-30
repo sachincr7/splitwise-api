@@ -9,6 +9,9 @@ export class UserEntity extends BaseEntityClass {
   name: string;
 
   @Column({ unique: true, nullable: false })
+  email: string;
+
+  @Column({ unique: true, nullable: true })
   phone: string;
 
   @Exclude()
