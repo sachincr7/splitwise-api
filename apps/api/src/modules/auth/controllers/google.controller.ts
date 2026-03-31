@@ -1,4 +1,5 @@
 import { Controller, Get, Request, UseGuards, Version } from '@nestjs/common';
+import { Public } from '../decorators/public.decorator';
 import { AuthService } from '../auth.service';
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
 
@@ -8,6 +9,7 @@ export class GoogleController {
 
   @Get('google/login')
   @Version('1')
+  @Public()
   @UseGuards(GoogleAuthGuard)
   googleLogin() {
     // Guard redirects to Google OAuth consent screen
@@ -15,6 +17,7 @@ export class GoogleController {
 
   @Get('google/callback')
   @Version('1')
+  @Public()
   @UseGuards(GoogleAuthGuard)
   async googleCallback(@Request() req) {
     const { email, displayName } = req.user;

@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, UseGuards, Version } from '@nestjs/common';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Body, Controller, Delete, Param, ParseIntPipe, Version } from '@nestjs/common';
 import { GroupService } from '../group.service';
 import { GroupMemberDto } from '../dto/group-member.dto';
 
@@ -9,7 +8,6 @@ export class RemoveMemberController {
 
   @Delete(':group_id/remove')
   @Version('1')
-  @UseGuards(JwtAuthGuard)
   async handle(
     @Param('group_id', ParseIntPipe) group_id: number,
     @Body() dto: GroupMemberDto,

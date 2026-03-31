@@ -1,5 +1,4 @@
-import { Body, Controller, Post, UseGuards, Version } from '@nestjs/common';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Body, Controller, Post, Version } from '@nestjs/common';
 import { GroupService } from '../group.service';
 import { CreateGroupDto } from '../dto/create-group.dto';
 
@@ -9,7 +8,6 @@ export class CreateGroupController {
 
   @Post()
   @Version('1')
-  @UseGuards(JwtAuthGuard)
   async handle(@Body() createGroupDto: CreateGroupDto) {
     const { name, creator_id, member_ids } = createGroupDto;
     return this.groupService.createGroup(name, creator_id, member_ids);

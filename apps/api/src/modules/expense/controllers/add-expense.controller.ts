@@ -1,5 +1,4 @@
-import { Body, Controller, Post, UseGuards, Version } from '@nestjs/common';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Body, Controller, Post, Version } from '@nestjs/common';
 import { ExpenseService } from '../expense.service';
 import { AddExpenseDto } from '../dto/add-expense.dto';
 
@@ -9,7 +8,6 @@ export class AddExpenseController {
 
   @Post()
   @Version('1')
-  @UseGuards(JwtAuthGuard)
   async handle(@Body() dto: AddExpenseDto) {
     return this.expenseService.createExpense(dto);
   }
