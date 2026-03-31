@@ -3,10 +3,10 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigType } from '@nestjs/config';
-import jwtConfig from '../../config/jwt.config';
 import { LocalStrategy } from './strategies/local.strategy';
 import { RegisterController } from './controllers/register.controller';
 import { LoginController } from './controllers/login.controller';
+import { googleOauthConfig, jwtConfig } from 'src/config';
 
 @Module({
   imports: [
@@ -16,6 +16,7 @@ import { LoginController } from './controllers/login.controller';
       inject: [jwtConfig.KEY],
       useFactory: (config: ConfigType<typeof jwtConfig>) => config,
     }),
+    ConfigModule.forFeature(googleOauthConfig),
   ],
   controllers: [RegisterController, LoginController],
   providers: [AuthService, LocalStrategy],
