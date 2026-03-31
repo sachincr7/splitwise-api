@@ -15,6 +15,7 @@ export class UserEntity extends BaseEntityClass {
   @Column()
   password: string;
 
+  @Exclude()
   @OneToMany(() => ExpenseGroupEntity, (group) => group.owner)
   groups: ExpenseGroupEntity[];
 }

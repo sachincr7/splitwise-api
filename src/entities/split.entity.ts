@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntityClass } from './base.entity';
 import { UserEntity } from './user.entity';
@@ -5,6 +6,7 @@ import { ExpenseEntity } from './expense.entity';
 
 @Entity('expense_splits')
 export class SplitEntity extends BaseEntityClass {
+  @Exclude()
   @ManyToOne(() => ExpenseEntity, (expense) => expense.splits)
   @JoinColumn({ name: 'expense_id' })
   expense: ExpenseEntity;
