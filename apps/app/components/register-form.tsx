@@ -29,7 +29,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
