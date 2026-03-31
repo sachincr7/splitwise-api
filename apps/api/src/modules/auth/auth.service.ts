@@ -61,6 +61,25 @@ export class AuthService {
   }
 
   /**
+   * Validates a Google OAuth user by finding or creating them
+   * @param googleUser - Google profile data
+   * @returns Login response with access token and user info
+   */
+  async validateGoogleUser(googleUser: { email: string; name: string }) {
+    let user = await this.usersService.findOneByEmail(googleUser.email);
+
+    if (!user) {
+      user = await this.usersService.create({
+        email: googleUser.email,
+        name: googleUser.name,
+        password: await hash(Math.random().toString(36), 10),
+      });
+    }
+
+    return this.login({ id: user.id, email: user.email, name: user.name });
+  }
+
+  /**
    * Registers a new user with hashed password
    * @param data - Registration data containing name, email, phone, and password
    * @returns Created user object

@@ -6,6 +6,8 @@ import { ConfigModule, ConfigType } from '@nestjs/config';
 import { LocalStrategy } from './strategies/local.strategy';
 import { RegisterController } from './controllers/register.controller';
 import { LoginController } from './controllers/login.controller';
+import { GoogleController } from './controllers/google.controller';
+import { GoogleStrategy } from './strategies/google.strategy';
 import { googleOauthConfig, jwtConfig } from 'src/config';
 
 @Module({
@@ -18,8 +20,8 @@ import { googleOauthConfig, jwtConfig } from 'src/config';
     }),
     ConfigModule.forFeature(googleOauthConfig),
   ],
-  controllers: [RegisterController, LoginController],
-  providers: [AuthService, LocalStrategy],
+  controllers: [RegisterController, LoginController, GoogleController],
+  providers: [AuthService, LocalStrategy, GoogleStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
