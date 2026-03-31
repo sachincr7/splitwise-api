@@ -8,6 +8,7 @@ import { RegisterController } from './controllers/register.controller';
 import { LoginController } from './controllers/login.controller';
 import { GoogleController } from './controllers/google.controller';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { googleOauthConfig, jwtConfig } from 'src/config';
 
 @Module({
@@ -19,9 +20,10 @@ import { googleOauthConfig, jwtConfig } from 'src/config';
       useFactory: (config: ConfigType<typeof jwtConfig>) => config,
     }),
     ConfigModule.forFeature(googleOauthConfig),
+    ConfigModule.forFeature(jwtConfig),
   ],
   controllers: [RegisterController, LoginController, GoogleController],
-  providers: [AuthService, LocalStrategy, GoogleStrategy],
+  providers: [AuthService, LocalStrategy, GoogleStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

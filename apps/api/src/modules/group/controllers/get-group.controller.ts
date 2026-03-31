@@ -1,4 +1,5 @@
-import { Controller, Get, Param, ParseIntPipe, Version } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, UseGuards, Version } from '@nestjs/common';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { GroupService } from '../group.service';
 
 @Controller('groups')
@@ -7,6 +8,7 @@ export class GetGroupController {
 
   @Get(':id')
   @Version('1')
+  @UseGuards(JwtAuthGuard)
   async handle(@Param('id', ParseIntPipe) id: number) {
     return this.groupService.getGroup(id);
   }

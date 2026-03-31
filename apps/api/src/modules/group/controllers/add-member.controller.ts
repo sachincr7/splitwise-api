@@ -1,4 +1,5 @@
-import { Body, Controller, Param, ParseIntPipe, Post, Version } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post, UseGuards, Version } from '@nestjs/common';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { GroupService } from '../group.service';
 import { GroupMemberDto } from '../dto/group-member.dto';
 
@@ -8,6 +9,7 @@ export class AddMemberController {
 
   @Post(':group_id/add')
   @Version('1')
+  @UseGuards(JwtAuthGuard)
   async handle(
     @Param('group_id', ParseIntPipe) group_id: number,
     @Body() dto: GroupMemberDto,
