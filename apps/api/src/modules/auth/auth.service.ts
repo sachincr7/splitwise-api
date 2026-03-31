@@ -80,6 +80,22 @@ export class AuthService {
   }
 
   /**
+   * Validates a JWT user by looking up the user from the decoded payload
+   * @param payload - Decoded JWT payload containing user ID
+   * @returns User object without sensitive data
+   * @throws UnauthorizedException if user not found
+   */
+  async validateJwtUser(payload: AuthJwtPayload) {
+    const user = await this.usersService.findOneById(payload.sub);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return { id: user.id, email: user.email, name: user.name };
+  }
+
+  /**
    * Registers a new user with hashed password
    * @param data - Registration data containing name, email, phone, and password
    * @returns Created user object
