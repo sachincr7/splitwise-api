@@ -1,4 +1,5 @@
-import { Controller, Get, Request, UseGuards, Version } from '@nestjs/common';
+import { Controller, Get, Request, Res, UseGuards, Version } from '@nestjs/common';
+import { Response } from 'express';
 import { Public } from '../decorators/public.decorator';
 import { AuthService } from '../auth.service';
 import { GoogleAuthGuard } from '../guards/google-auth.guard';
@@ -19,11 +20,12 @@ export class GoogleController {
   @Version('1')
   @Public()
   @UseGuards(GoogleAuthGuard)
-  async googleCallback(@Request() req) {
+  async googleCallback(@Request() req, @Res() res: Response) {
     const { email, displayName } = req.user;
-    return this.authService.validateGoogleUser({
+    const result = await this.authService.validateGoogleUser({
       email: email ?? req.user.emails?.[0]?.value,
       name: displayName,
     });
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${result.access_token}`);
   }
 }
