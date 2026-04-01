@@ -52,7 +52,6 @@ async function bootstrap() {
       cacheManager.get('health-check'),
     ]);
     const [, ping] = await Promise.race([pingTest, timeout]);
-    console.log('ping', ping);
     console.log(`🔄 Redis Cache: ${ping === 'ok' ? '✅ Connected' : '⚠️ Unexpected response'}`);
   } catch (err) {
     console.log(`🔄 Redis Cache: ❌ ${err instanceof Error ? err.message : 'Failed'}`);
