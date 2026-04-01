@@ -9,6 +9,7 @@ import { Cache } from 'cache-manager';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Session configuration
   app.use(session({
     secret: process.env.SESSION_SECRET!,
     resave: false,
@@ -20,14 +21,19 @@ async function bootstrap() {
     },
   }));
 
+  // CORS configuration
   app.enableCors({
     origin: process.env.FRONTEND_URL!,
     credentials: true,
   });
 
+  // Global validation and serialization
   app.useGlobalPipes(new ValidationPipe());
+
+  // Global serialization
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
+  // API versioning
   app.enableVersioning({
     type: VersioningType.URI,
   });
