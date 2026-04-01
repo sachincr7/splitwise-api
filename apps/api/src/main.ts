@@ -11,7 +11,7 @@ import { Cache } from 'cache-manager';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Create Redis client for session store
+  // Create Redis client for session store (using redis v4 for connect-redis v7 compatibility)
   const redisClient = createClient({
     url: process.env.REDIS_URL || `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`,
   });
