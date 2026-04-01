@@ -11,9 +11,11 @@ import { SettleUpModule } from './modules/settle-up/settle-up.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { redisConfig } from './config/redis.config';
 import { CacheModule } from '@nestjs/cache-manager';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
