@@ -15,8 +15,9 @@ export const redisConfig = (
 
   const host = configService.get<string>('redis.host') ?? 'localhost';
   const port = configService.get<number>('redis.port') ?? 6379;
+  const password = configService.get<string>('redis.password');
 
   return {
-    stores: [new KeyvRedis(`redis://${host}:${port}`)],
+    stores: [new KeyvRedis(`redis://:${password}@${host}:${port}`)],
   };
 };
