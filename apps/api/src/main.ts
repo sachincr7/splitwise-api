@@ -2,6 +2,8 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ClassSerializerInterceptor, ValidationPipe, VersioningType } from '@nestjs/common';
 import * as session from 'express-session';
+import { RedisStore } from 'connect-redis';
+import { createClient } from 'redis';
 import { DataSource } from 'typeorm';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -9,8 +11,15 @@ import { Cache } from 'cache-manager';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Session configuration
+  // Create Redis client for session store
+  const redisClient = createClient({
+    url: process.env.REDIS_URL || `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`,
+  });
+  await redisClient.connect();
+
+  // Session configuration with Redis store
   app.use(session({
+    store: new RedisStore({ client: redisClient, prefix: 'sess:' }),
     secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
