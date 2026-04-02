@@ -1,11 +1,14 @@
 import { Body, Controller, Param, ParseIntPipe, Post, Version } from '@nestjs/common';
 import { GroupService } from '../group.service';
 import { GroupMemberDto } from '../dto/group-member.dto';
+import { Roles } from 'src/modules/auth/decorators/roles.decorator';
+import { Role } from 'src/entities/enums/role.enum';
 
 @Controller('groups')
 export class AddMemberController {
   constructor(private readonly groupService: GroupService) {}
 
+  @Roles(Role.USER)
   @Post(':group_id/add')
   @Version('1')
   async handle(
