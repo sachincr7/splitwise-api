@@ -1,7 +1,8 @@
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-svh items-center justify-center">
-      <p className="text-muted-foreground text-sm">Dashboard</p>
+    <div>
+      <h1 className="text-2xl font-semibold">Dashboard</h1>
+      <p className="text-muted-foreground mt-2">Welcome to your dashboard</p>
     </div>
   )
 }
