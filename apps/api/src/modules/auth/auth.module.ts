@@ -13,6 +13,7 @@ import { googleOauthConfig, jwtConfig } from 'src/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { MeController } from './controllers/me.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { RolesGuard } from './guards/roles.guard';
     ConfigModule.forFeature(googleOauthConfig),
     ConfigModule.forFeature(jwtConfig),
   ],
-  controllers: [RegisterController, LoginController, GoogleController],
+  controllers: [RegisterController, LoginController, GoogleController, MeController],
   providers: [
     AuthService,
     LocalStrategy,

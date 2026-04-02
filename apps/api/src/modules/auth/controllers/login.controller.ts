@@ -15,10 +15,4 @@ export class LoginController {
   handle(@Request() req) {
     return this.authService.login(req.user);
   }
-
-  @Get('me')
-  @Version('1')
-  me(@Request() req) {
-    return req.user;
-  }
 }
