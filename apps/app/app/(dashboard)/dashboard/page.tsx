@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { PlusIcon, UsersIcon } from "lucide-react"
+import { GroupCard } from "@/components/group-card"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/stores/auth.store"
 import { toast } from "sonner"
@@ -86,24 +87,15 @@ export default function DashboardPage() {
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {groups.map((group) => (
-              <button
+              <GroupCard
                 key={group.id}
-                onClick={() => router.push(`/dashboard/groups/${group.id}`)}
-                className="rounded-lg border bg-card p-4 text-left transition-colors hover:bg-accent"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="font-medium">{group.name}</p>
-                    <p className="text-muted-foreground mt-0.5 text-xs">
-                      {group.owner.id === user?.id ? "You" : group.owner.name || group.owner.email} · Owner
-                    </p>
-                  </div>
-                  <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                    <UsersIcon className="h-3.5 w-3.5" />
-                    {group.members.length}
-                  </span>
-                </div>
-              </button>
+                id={group.id}
+                name={group.name}
+                owner={group.owner}
+                memberCount={group.members.length}
+                currentUserId={user?.id}
+                onClick={(id) => router.push(`/dashboard/groups/${id}`)}
+              />
             ))}
           </div>
         )}
