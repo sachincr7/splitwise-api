@@ -23,7 +23,7 @@ export function GroupCard({
   return (
     <button
       onClick={() => onClick(id)}
-      className="rounded-lg border bg-card p-4 text-left transition-colors hover:bg-accent w-full"
+      className="rounded-lg border cursor-pointer bg-card p-4 text-left transition-colors hover:bg-accent w-full"
     >
       <div className="flex items-start justify-between">
         <div>
