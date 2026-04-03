@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { PlusIcon, UsersIcon } from "lucide-react"
-import { GroupCard } from "@/components/group-card"
+import { GroupList } from "@/components/groups/group-list"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/stores/auth.store"
 import { toast } from "sonner"
@@ -85,19 +85,7 @@ export default function DashboardPage() {
             </Button>
           </div>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {groups.map((group) => (
-              <GroupCard
-                key={group.id}
-                id={group.id}
-                name={group.name}
-                owner={group.owner}
-                memberCount={group.members.length}
-                currentUserId={user?.id}
-                onClick={(id) => router.push(`/dashboard/groups/${id}`)}
-              />
-            ))}
-          </div>
+          <GroupList groups={groups} currentUserId={user?.id} />
         )}
       </div>
     </div>
