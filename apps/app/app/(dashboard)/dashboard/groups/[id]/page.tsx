@@ -3,16 +3,9 @@
 import * as React from "react"
 import { useParams, useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { UserPlus, ArrowLeft, Trash2 } from "lucide-react"
+import { UserPlus, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog"
+import { ActionDialog } from "@/components/ui/action-dialog"
 import { MemberSearch, UserResult } from "@/components/member-search"
 import { MemberList } from "@/components/groups/member-list"
 import { useAuthStore } from "@/stores/auth.store"
@@ -147,45 +140,29 @@ export default function GroupDetailPage() {
         </div>
 
         {isOwner && (
-          <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
-            <DialogTrigger asChild>
+          <ActionDialog
+            open={addDialogOpen}
+            onOpenChange={setAddDialogOpen}
+            trigger={
               <Button size="sm">
                 <UserPlus className="h-4 w-4" />
                 Add Member
               </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add Members</DialogTitle>
-              </DialogHeader>
-
-              <MemberSearch
-                selected={selectedMembers}
-                onAdd={(u) => setSelectedMembers((prev) => [...prev, u])}
-                onRemove={(uid) =>
-                  setSelectedMembers((prev) => prev.filter((m) => m.id !== uid))
-                }
-              />
-
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSelectedMembers([])
-                    setAddDialogOpen(false)
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleAddMembers}
-                  disabled={selectedMembers.length === 0 || isAdding}
-                >
-                  {isAdding ? "Adding..." : `Add ${selectedMembers.length || ""} Member${selectedMembers.length !== 1 ? "s" : ""}`}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+            }
+            title="Add Members"
+            confirmLabel={isAdding ? "Adding..." : `Add ${selectedMembers.length || ""} Member${selectedMembers.length !== 1 ? "s" : ""}`}
+            confirmDisabled={selectedMembers.length === 0 || isAdding}
+            onConfirm={handleAddMembers}
+            onCancel={() => setSelectedMembers([])}
+          >
+            <MemberSearch
+              selected={selectedMembers}
+              onAdd={(u) => setSelectedMembers((prev) => [...prev, u])}
+              onRemove={(uid) =>
+                setSelectedMembers((prev) => prev.filter((m) => m.id !== uid))
+              }
+            />
+          </ActionDialog>
         )}
       </div>
 
