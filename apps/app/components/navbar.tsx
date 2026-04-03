@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { UserIcon, LayoutDashboardIcon, LogOutIcon } from "lucide-react"
 import {
@@ -44,7 +45,7 @@ export function Navbar() {
     <nav className="border-b bg-background">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo / Brand */}
-        <span className="text-lg font-semibold">Splitwise</span>
+        <Link href="/dashboard" className="text-lg font-semibold hover:opacity-80">Splitwise</Link>
 
         {/* User Dropdown */}
         <DropdownMenu>
