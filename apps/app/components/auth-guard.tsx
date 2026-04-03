@@ -10,10 +10,12 @@ const PROTECTED_PATHS = ["/dashboard"]
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
-  const { token } = useAuthStore()
+  const { token, _hasHydrated } = useAuthStore()
   const isAuthenticated = !!token
 
   useEffect(() => {
+    if (!_hasHydrated) return
+
     // Redirect authenticated users away from public pages (login/register)
     if (isAuthenticated && PUBLIC_PATHS.includes(pathname)) {
       router.replace("/dashboard")
@@ -25,7 +27,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       router.replace("/")
       return
     }
-  }, [isAuthenticated, pathname, router])
+  }, [isAuthenticated, pathname, router, _hasHydrated])
 
   return <>{children}</>
 }

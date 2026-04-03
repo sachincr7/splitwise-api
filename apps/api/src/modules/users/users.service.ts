@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../../entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Or, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -26,5 +26,17 @@ export class UsersService {
   }): Promise<UserEntity> {
     const user = this.userRepo.create(data);
     return this.userRepo.save(user);
+  }
+
+  async search(query: string, excludeId?: number): Promise<UserEntity[]> {
+    return this.userRepo.find({
+      where: [
+        { name: ILike(`%${query}%`) },
+        { email: ILike(`%${query}%`) },
+      ],
+      take: 10,
+    }).then((users) =>
+      excludeId ? users.filter((u) => u.id !== excludeId) : users,
+    );
   }
 }
