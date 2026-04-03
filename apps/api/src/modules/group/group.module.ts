@@ -3,6 +3,7 @@ import { CreateGroupController } from './controllers/create-group.controller';
 import { AddMemberController } from './controllers/add-member.controller';
 import { RemoveMemberController } from './controllers/remove-member.controller';
 import { GetGroupController } from './controllers/get-group.controller';
+import { GetUserGroupsController } from './controllers/get-user-groups.controller';
 import { GroupService } from './group.service';
 
 @Module({
@@ -11,6 +12,7 @@ import { GroupService } from './group.service';
     AddMemberController,
     RemoveMemberController,
     GetGroupController,
+    GetUserGroupsController,
   ],
   providers: [GroupService],
   exports: [GroupService],

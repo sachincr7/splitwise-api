@@ -100,6 +100,15 @@ export class GroupService {
     return savedGroup;
   }
 
+  async getUserGroups(userId: number) {
+    return this.expenseGroupRepo
+      .createQueryBuilder('group')
+      .leftJoinAndSelect('group.owner', 'owner')
+      .leftJoinAndSelect('group.members', 'members')
+      .where('owner.id = :userId OR members.id = :userId', { userId })
+      .getMany();
+  }
+
   async getGroup(groupId: number) {
     const group = await this.expenseGroupRepo.findOne({
       where: { id: groupId },
