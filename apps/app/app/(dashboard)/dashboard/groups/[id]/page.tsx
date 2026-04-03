@@ -14,6 +14,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { MemberSearch, UserResult } from "@/components/member-search"
+import { MemberList } from "@/components/groups/member-list"
 import { useAuthStore } from "@/stores/auth.store"
 
 interface Member {
@@ -189,40 +190,12 @@ export default function GroupDetailPage() {
       </div>
 
       {/* Members List */}
-      <div className="rounded-lg border">
-        <div className="border-b px-4 py-3">
-          <h2 className="text-sm font-medium">
-            Members ({group.members.length})
-          </h2>
-        </div>
-        <ul className="divide-y">
-          {group.members.map((member) => (
-            <li key={member.id} className="flex items-center justify-between px-4 py-3">
-              <div>
-                <p className="text-sm font-medium">{member.name || "No name"}</p>
-                <p className="text-muted-foreground text-xs">{member.email}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                {member.id === group.owner.id && (
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                    Owner
-                  </span>
-                )}
-                {isOwner && member.id !== user?.id && (
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className="text-muted-foreground hover:text-destructive"
-                    onClick={() => handleRemoveMember(member.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <MemberList
+        members={group.members}
+        ownerId={group.owner.id}
+        currentUserId={user?.id}
+        onRemove={handleRemoveMember}
+      />
     </div>
   )
 }
