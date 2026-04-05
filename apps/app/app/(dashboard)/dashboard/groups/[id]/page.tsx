@@ -3,11 +3,12 @@
 import * as React from "react"
 import { useParams, useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { UserPlus, ArrowLeft } from "lucide-react"
+import { UserPlus, ArrowLeft, PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ActionDialog } from "@/components/ui/action-dialog"
 import { MemberSearch, UserResult } from "@/components/member-search"
 import { MemberList } from "@/components/groups/member-list"
+import { ExpenseList } from "@/components/expenses/expense-list"
 import { useAuthStore } from "@/stores/auth.store"
 
 interface Member {
@@ -33,6 +34,8 @@ export default function GroupDetailPage() {
   const [addDialogOpen, setAddDialogOpen] = React.useState(false)
   const [selectedMembers, setSelectedMembers] = React.useState<UserResult[]>([])
   const [isAdding, setIsAdding] = React.useState(false)
+  const [expenses, setExpenses] = React.useState<any[]>([])
+  const [isLoadingExpenses, setIsLoadingExpenses] = React.useState(true)
 
   const fetchGroup = React.useCallback(async () => {
     try {
@@ -52,6 +55,24 @@ export default function GroupDetailPage() {
   React.useEffect(() => {
     fetchGroup()
   }, [fetchGroup])
+
+  React.useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/v1/expenses/group/${id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        if (!res.ok) throw new Error()
+        setExpenses(await res.json())
+      } catch {
+        toast.error("Failed to load expenses")
+      } finally {
+        setIsLoadingExpenses(false)
+      }
+    }
+    fetchExpenses()
+  }, [id, token])
 
   const handleAddMembers = async () => {
     if (!user || selectedMembers.length === 0) return
@@ -139,7 +160,17 @@ export default function GroupDetailPage() {
           </div>
         </div>
 
-        {isOwner && (
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => router.push(`/dashboard/groups/${id}/expenses/create`)}
+          >
+            <PlusCircle className="h-4 w-4" />
+            Add Expense
+          </Button>
+
+          {isOwner && (
           <ActionDialog
             open={addDialogOpen}
             onOpenChange={setAddDialogOpen}
@@ -163,7 +194,8 @@ export default function GroupDetailPage() {
               }
             />
           </ActionDialog>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Members List */}
@@ -173,6 +205,20 @@ export default function GroupDetailPage() {
         currentUserId={user?.id}
         onRemove={handleRemoveMember}
       />
+
+      {/* Expenses */}
+      <div className="mt-6 rounded-lg border">
+        <div className="border-b px-4 py-3">
+          <h2 className="text-sm font-medium">Expenses</h2>
+        </div>
+        {isLoadingExpenses ? (
+          <div className="flex items-center justify-center py-10">
+            <p className="text-muted-foreground text-sm">Loading expenses...</p>
+          </div>
+        ) : (
+          <ExpenseList expenses={expenses} currentUserId={user?.id} />
+        )}
+      </div>
     </div>
   )
 }

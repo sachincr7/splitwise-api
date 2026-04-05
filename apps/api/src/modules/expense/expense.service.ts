@@ -148,4 +148,12 @@ export class ExpenseService {
       relations: ['users', 'splits', 'splits.user'],
     });
   }
+
+  getGroupExpenses(groupId: number) {
+    return this.expenseRepo.find({
+      where: { group: { id: groupId } },
+      relations: ['created_by', 'splits', 'splits.user'],
+      order: { created_at: 'DESC' },
+    });
+  }
 }
