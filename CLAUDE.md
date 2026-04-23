@@ -76,6 +76,8 @@ Route groups under `apps/app/src/app/`:
 
 **UI:** shadcn/ui components live in `components/ui/`. Feature components are colocated by domain (group, expense, auth).
 
+**Theming:** Dark/light mode is handled by `next-themes` via a `ThemeProvider` wrapper. The active theme class is applied to the `<html>` element. shadcn/ui components use CSS variables for colors, so they respond to the theme automatically. The toggle is a client component — avoid reading `theme` during SSR to prevent hydration mismatches. Fonts are Geist (sans) and Geist Mono loaded via `next/font/google`.
+
 ## Environment Setup
 
 Copy `apps/api/.env.example` to `apps/api/.env` and fill in:
