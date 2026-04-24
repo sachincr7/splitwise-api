@@ -2,9 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Rules
+
+Detailed conventions live under [.claude/rules/](.claude/rules/README.md), split by concern (frontend design/components/state/forms/routing, backend api/services/dto/logging, database entities/migrations). Consult the relevant file before making changes in that area.
+
 ## Project Overview
 
-Full-stack expense-splitting app (Splitwise clone) built as a pnpm monorepo with two apps:
+Full-stack expense-splitting app (branded **Gronic**) built as a pnpm monorepo with two apps:
 - `apps/api` — NestJS backend (TypeScript, PostgreSQL, Redis)
 - `apps/app` — Next.js 16 frontend (React 19, Tailwind CSS, shadcn/ui)
 
