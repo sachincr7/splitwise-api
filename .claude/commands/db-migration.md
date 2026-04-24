@@ -22,7 +22,4 @@ Given a migration description `$ARGUMENTS`:
    ```
 
 ## Rules
-- Never edit a migration file that has already been run in production
-- Decimal columns for money must use `precision: 10, scale: 2`
-- All entities must include `created_at` and `updated_at` timestamp columns
-- If reverting: `pnpm migration:revert` rolls back only the latest migration
+See `.claude/rules/database/migrations.md` and `.claude/rules/database/entities.md`.

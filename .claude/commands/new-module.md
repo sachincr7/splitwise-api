@@ -14,7 +14,4 @@ Given a module name `$ARGUMENTS`, generate:
 6. **Barrel export** — add the module to `app.module.ts` imports
 
 ## Rules
-- Follow exact patterns from `apps/api/src/modules/group/` or `apps/api/src/modules/expense/`
-- Use TypeORM `@InjectRepository` pattern
-- Extend `BaseEntity` or match existing entity conventions
-- Do not add anything beyond what is needed for basic CRUD
+See `.claude/rules/backend/api.md`, `.claude/rules/backend/services.md`, and `.claude/rules/backend/dto.md`.
